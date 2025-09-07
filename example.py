@@ -37,8 +37,19 @@ class AgeCalculator(QWidget):
         current_year, current_month, current_day = datetime.now().year, datetime.now().month, datetime.now().day
         name = self.name_line_edit.text()
         birth_date = self.birth_line_edit.text()
-        birth_year = datetime.strptime(birth_date, "%m/%d/%Y").date().year
-        age = current_year - birth_year
+        birth_year, birth_month, birth_day = (int(birth_date[-4:]), int(birth_date[:2].strip("0")),
+                                              int(birth_date[3:5].strip("0")))
+        if birth_month - current_month > 0:
+            age = current_year - birth_year - 1
+        elif birth_month - current_month == 0:
+            if birth_day - current_day > 0:
+                age = current_year - birth_year - 1
+            else:
+                age = current_year - birth_year
+        else:
+            age = current_year - birth_year
+        # birth_year = datetime.strptime(birth_date, "%m/%d/%Y").date().year
+        # age = current_year - birth_year
 
         self.output_label.setText(f"{name} is {age} years old.")
 
