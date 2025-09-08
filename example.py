@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QApplication, QVBoxLayout, QLabel, QWidget, QGridLayout, \
+from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QGridLayout, \
      QLineEdit, QPushButton
 
 import sys
@@ -20,7 +20,7 @@ class AgeCalculator(QWidget):
 
         calculate_button = QPushButton("Calculate Age")
         calculate_button.clicked.connect(self.calculate_age)
-        self.output_label = QLabel("10 years old")
+        self.output_label = QLabel("")
 
 
         # Add widgets to grid
