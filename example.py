@@ -1,5 +1,11 @@
-from PyQt6.QtWidgets import QApplication, QLabel, QWidget, QGridLayout, \
-     QLineEdit, QPushButton
+from PyQt6.QtWidgets import (
+    QApplication,
+    QLabel,
+    QWidget,
+    QGridLayout,
+    QLineEdit,
+    QPushButton,
+)
 
 import sys
 from datetime import datetime
@@ -22,7 +28,6 @@ class AgeCalculator(QWidget):
         calculate_button.clicked.connect(self.calculate_age)
         self.output_label = QLabel("")
 
-
         # Add widgets to grid
         grid.addWidget(name_label, 0, 0)
         grid.addWidget(self.name_line_edit, 0, 1)
@@ -34,11 +39,18 @@ class AgeCalculator(QWidget):
         self.setLayout(grid)
 
     def calculate_age(self):
-        current_year, current_month, current_day = datetime.now().year, datetime.now().month, datetime.now().day
+        current_year, current_month, current_day = (
+            datetime.now().year,
+            datetime.now().month,
+            datetime.now().day,
+        )
         name = self.name_line_edit.text()
         birth_date = self.birth_line_edit.text()
-        birth_year, birth_month, birth_day = (int(birth_date[-4:]), int(birth_date[:2].strip("0")),
-                                              int(birth_date[3:5].strip("0")))
+        birth_year, birth_month, birth_day = (
+            int(birth_date[-4:]),
+            int(birth_date[:2].strip("0")),
+            int(birth_date[3:5].strip("0")),
+        )
         if birth_month - current_month > 0:
             age = current_year - birth_year - 1
         elif birth_month - current_month == 0:
@@ -52,6 +64,7 @@ class AgeCalculator(QWidget):
         # age = current_year - birth_year
 
         self.output_label.setText(f"{name} is {age} years old.")
+
 
 app = QApplication(sys.argv)
 age_calculator = AgeCalculator()

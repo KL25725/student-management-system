@@ -1,7 +1,15 @@
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication, QMainWindow, \
-     QLineEdit, QPushButton, QTableWidget, QTableWidgetItem, QDialog, QVBoxLayout, \
-     QComboBox
+from PyQt6.QtWidgets import (
+    QApplication,
+    QMainWindow,
+    QLineEdit,
+    QPushButton,
+    QTableWidget,
+    QTableWidgetItem,
+    QDialog,
+    QVBoxLayout,
+    QComboBox,
+)
 from PyQt6.QtGui import QAction
 import sys
 import sqlite3
@@ -42,7 +50,9 @@ class MainWindow(QMainWindow):
             self.table.insertRow(row_number)
             for column_number, column_data in enumerate(row_data):
                 # print(column_data)
-                self.table.setItem(row_number, column_number, QTableWidgetItem(str(column_data)))
+                self.table.setItem(
+                    row_number, column_number, QTableWidgetItem(str(column_data))
+                )
         connection.close()
 
     def insert(self):
@@ -88,8 +98,10 @@ class InsertDialog(QDialog):
         mobile = self.mobile.text()
         connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
-        cursor.execute("INSERT INTO students (name, course, mobile) VALUES (?, ?, ?)",
-                       (name, course, mobile))
+        cursor.execute(
+            "INSERT INTO students (name, course, mobile) VALUES (?, ?, ?)",
+            (name, course, mobile),
+        )
         connection.commit()
         cursor.close()
         connection.close()
