@@ -190,15 +190,17 @@ class DeleteDialog(QDialog):
         self.setLayout(layout)
 
     def delete_record(self):
-        index = main_window.table.currentRow()
-        student_id = main_window.table.item(index, 0).text()
+        # delete multiple records at once
+        selected_rows = main_window.table.selectedItems()
 
         connection = sqlite3.connect("database.db")
         cursor = connection.cursor()
-        cursor.execute(
-            "DELETE FROM students WHERE id = ?",
-            (student_id, )
-        )
+        for i in selected_rows:
+            student_id = main_window.table.item(i.row(), 0).text()
+            cursor.execute(
+                "DELETE FROM students WHERE id = ?",
+                (student_id, )
+            )
         connection.commit()
         cursor.close()
         connection.close()
@@ -208,7 +210,10 @@ class DeleteDialog(QDialog):
 
         delete_completion_box = QMessageBox()
         delete_completion_box.setWindowTitle("Action Complete")
-        delete_completion_box.setText("The record has been deleted.")
+        if len(selected_rows) == 1:
+            delete_completion_box.setText("The record has been deleted.")
+        else:
+            delete_completion_box.setText("The records have been deleted.")
         delete_completion_box.exec()
 
 
