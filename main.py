@@ -161,6 +161,13 @@ class EditDialog(QDialog):
         # Refresh the table
         main_window.load_data()
 
+        self.close()
+
+        update_complete_box = QMessageBox()
+        update_complete_box.setWindowTitle("Update Complete")
+        update_complete_box.setText("The Record has been updated.")
+        update_complete_box.exec()
+
 
 class DeleteDialog(QDialog):
     def __init__(self):
