@@ -103,7 +103,60 @@ class MainWindow(QMainWindow):
 
 
 class EditDialog(QDialog):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Edit Student Data")
+        self.setFixedWidth(300)
+        self.setFixedHeight(300)
+
+        layout = QVBoxLayout()
+
+        # Get student data from selected row
+        index = main_window.table.currentRow()
+        self.student_id0 = main_window.table.item(index, 0).text()
+        student_name0 = main_window.table.item(index, 1).text()
+        course_name0 = main_window.table.item(index, 2).text()
+        mobile0 = main_window.table.item(index, 3).text()
+
+        self.student_name = QLineEdit(student_name0)
+        self.student_name.setPlaceholderText("Name")
+        layout.addWidget(self.student_name)
+
+        self.course_name = QComboBox()
+        courses = ["Biology", "Math", "Astronomy", "Physics"]
+        self.course_name.addItems(courses)
+        self.course_name.setCurrentText(course_name0)
+        layout.addWidget(self.course_name)
+
+        self.mobile = QLineEdit(mobile0)
+        self.mobile.setPlaceholderText("Phone Number")
+        layout.addWidget(self.mobile)
+
+        update_button = QPushButton("Update")
+        update_button.clicked.connect(self.update_student)
+        layout.addWidget(update_button)
+
+        self.setLayout(layout)
+
+    def update_student(self):
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+        cursor.execute(
+            "UPDATE students SET name = ?, course = ?, mobile = ? WHERE id = ?",
+            (
+                self.student_name.text(),
+                self.course_name.itemText(self.course_name.currentIndex()),
+                self.mobile.text(),
+                self.student_id0
+            )
+
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        # Refresh the table
+        main_window.load_data()
 
 
 class DeleteDialog(QDialog):
