@@ -10,7 +10,10 @@ from PyQt6.QtWidgets import (
     QVBoxLayout,
     QComboBox,
     QToolBar,
-    QStatusBar
+    QStatusBar,
+    QGridLayout,
+    QLabel,
+    QMessageBox
 )
 from PyQt6.QtGui import QAction, QIcon
 import sys
@@ -160,7 +163,46 @@ class EditDialog(QDialog):
 
 
 class DeleteDialog(QDialog):
-    pass
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Delete Confirmation")
+
+        layout = QGridLayout()
+
+        confirmation_msg = QLabel("Are you sure you want to delete?")
+
+        yes_button = QPushButton("Yes")
+        yes_button.clicked.connect(self.delete_record)
+
+        no_button = QPushButton("No")
+        no_button.clicked.connect(self.close)
+
+        layout.addWidget(confirmation_msg, 0, 0, 1, 2)
+        layout.addWidget(yes_button, 1, 0)
+        layout.addWidget(no_button, 1, 1)
+        self.setLayout(layout)
+
+    def delete_record(self):
+        index = main_window.table.currentRow()
+        student_id = main_window.table.item(index, 0).text()
+
+        connection = sqlite3.connect("database.db")
+        cursor = connection.cursor()
+        cursor.execute(
+            "DELETE FROM students WHERE id = ?",
+            (student_id, )
+        )
+        connection.commit()
+        cursor.close()
+        connection.close()
+        main_window.load_data()
+
+        self.close()
+
+        delete_completion_box = QMessageBox()
+        delete_completion_box.setWindowTitle("Action Complete")
+        delete_completion_box.setText("The record has been deleted.")
+        delete_completion_box.exec()
 
 
 class InsertDialog(QDialog):
